@@ -9,18 +9,36 @@
         </li>
       </ul>
     </div>
-    <div>
+    <div class="mt-4">
       <h2>Available Ingredients</h2>
-      <button @click="addIngredient(ingredient)" v-for="(ingredient, index) in buns" :key="index">{{ ingredient }}</button>
-      <button @click="addIngredient(ingredient)" v-for="(ingredient, index) in sauces" :key="index">{{ ingredient }}</button>
-      <button @click="addIngredient(ingredient)" v-for="(ingredient, index) in toppings" :key="index">{{ ingredient }}</button>
+      <div class="flex flex-wrap flex-row">
+      <div class="flex flex-col">
+      <button class="border border-2 rounded" @click="addIngredient(ingredient)" v-for="(ingredient, index) in buns" :key="index">{{ ingredient
+        }}</button>
+      <button @click="nextIngredient">Next</button>
+      </div>
+      <div>
+        <button class="hidden border border-2 rounded" @click="addIngredient(ingredient)" v-for="(ingredient, index) in patties" :key="index">{{
+          ingredient }}</button>
+        <button id="patty-next" class="hidden" @click="nextIngredient">Next</button>
+      </div>
+      <div>
+        <button class="hidden border border-2 rounded" @click="addIngredient(ingredient)" v-for="(ingredient, index) in toppings"
+          :key="index">{{ ingredient }}</button>
+        <button id="topping-next" class="hidden" @click="nextIngredient">Next</button>
+      </div>
+      <div>
+        <button class="hidden border border-2 rounded" @click="addIngredient(ingredient)" v-for="(ingredient, index) in sauces" :key="index">{{
+          ingredient }}</button>
+        <button class="hidden" @click="makeBurger">Make Burger</button>
+        </div>
+      </div>
     </div>
-    <button @click="makeBurger">Make Burger</button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
 const selectedIngredients = ref([])
 
@@ -76,8 +94,12 @@ function makeBurger() {
 function addIngredient(ingredient) {
   selectedIngredients.value.push(ingredient)
 }
+
+function nextIngredient() {
+
+}
 </script>
 
 <style scoped>
-
+@import "tailwindcss";
 </style>
