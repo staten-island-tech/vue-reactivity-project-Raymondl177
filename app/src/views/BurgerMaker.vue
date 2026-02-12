@@ -4,10 +4,10 @@
     <div>
       <h2>Selected Ingredients</h2>
       <ul class="inline-flex flex-wrap gap-2 flex-col">
-        <li class="border">Bun: {{ selectedIngredients.bun }}</li>
-        <li class="border">Patty: {{ selectedIngredients.patty }}</li>
-        <li class="border">Toppings: {{ selectedIngredients.toppings.join(', ') }}</li>
-        <li class="border">Sauce: {{ selectedIngredients.sauce }}</li>
+        <li class="border">Bun: {{ selectedIngredients.bun.option }} (${{ selectedIngredients.bun.price }})</li>
+        <li class="border">Patty: {{ selectedIngredients.patty.option }} (${{ selectedIngredients.patty.price }})</li>
+        <li class="border">Toppings: {{ selectedIngredients.toppings.map(t => t.option).join(', ') }} (${{ roundToNearestTenth(selectedIngredients.toppings.reduce((acc, t) => acc + t.price, 0)) }})</li>
+        <li class="border">Sauce: {{ selectedIngredients.sauce.option }} (${{ selectedIngredients.sauce.price }})</li>
       </ul>
 
     </div>
@@ -15,12 +15,13 @@
       <h2>Available Ingredients</h2>
       <div class="inline-flex flex-wrap gap-2 flex-col">
         <button class="border" @click="addIngredient(item)" v-for="(item, index) in ingredientSteps[step].options"
-          :key="index">{{ item }}</button>
+          :key="index">{{ item.name }} (${{ item.price }})</button>
           <button class="border" @click="previousIngredient" :disabled="step.value === 0">Back</button>
           <button class="border" @click="clearIngredients">Clear Ingredients</button>
         <button class="border" @click="nextIngredient"
           :disabled="step.value === ingredientSteps.length - 1">Next</button>
         <button class="border" @click="makeBurger">Make Burger</button>
+
       </div>
     </div>
   </div>
@@ -29,11 +30,15 @@
 <script setup>
 import { ref, reactive } from 'vue'
 
+function roundToNearestTenth(num) {
+return Math.round(num * 10) / 10;
+}
+
 const selectedIngredients = reactive({
-  bun: null,
-  patty: null,
+  bun: { option: null, price: 0 },
+  patty: { option: null, price: 0 },
   toppings: [],
-  sauce: null
+  sauce: { option: null, price: 0 }
 })
 
 const ingredientSteps = [
@@ -120,9 +125,12 @@ function addIngredient(item) {
   if (currentStep.key === 'toppings') {
     if (!selectedIngredients.toppings.includes(item)) {
       selectedIngredients.toppings.push(item)
+      selectedIngredients.toppings.reduce((acc, t) => Math.floor(acc + t.price), 0)
     }
   } else {
     selectedIngredients[currentStep.key] = item
+    selectedIngredients[currentStep.key].option = item.name
+    selectedIngredients[currentStep.key].price = item.price
   }
 
 }
@@ -137,10 +145,10 @@ function nextIngredient() {
 }
 
 function clearIngredients() {
-  selectedIngredients.bun = null
-  selectedIngredients.patty = null
-  selectedIngredients.toppings = []
-  selectedIngredients.sauce = null
+  selectedIngredients.bun[0] = { option: null, price: 0 }
+  selectedIngredients.patty[0] = { option: null, price: 0 }
+  selectedIngredients.toppings = [{ option: null, price: 0 }]
+  selectedIngredients.sauce[0] = { option: null, price: 0 }
 }
 
 function previousIngredient() {
