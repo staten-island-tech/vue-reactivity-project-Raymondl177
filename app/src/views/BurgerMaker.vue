@@ -1,49 +1,41 @@
 <template>
-  <div>
-    <h1>Burger Maker</h1>
-    <div>
-      <h2>Selected Ingredients</h2>
-      <ul class="inline-flex flex-wrap gap-2 flex-col">
-        <li class="border">Bun: {{ selectedIngredients.bun.option }} (${{ selectedIngredients.bun.price }})</li>
-        <li class="border">Patty: {{ selectedIngredients.patty.option }} (${{ selectedIngredients.patty.price }})</li>
-        <li class="border">Toppings: {{ selectedIngredients.toppings.map(t => t.option).join(', ') }} (${{ roundToNearestTenth(selectedIngredients.toppings.reduce((acc, t) => acc + t.price, 0)) }})</li>
-        <li class="border">Sauce: {{ selectedIngredients.sauce.option }} (${{ selectedIngredients.sauce.price }})</li>
-      </ul>
+  <div class="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
+    <h1 class="text-3xl font-bold text-gray-100 mb-6">Burger Maker</h1>
 
-    </div>
-    <div class="mt-4">
-      <h2>Available Ingredients</h2>
-      <div class="inline-flex flex-wrap gap-2 flex-col">
-        <button class="border" @click="addIngredient(item)" v-for="(item, index) in ingredientSteps[step].options"
-          :key="index">{{ item.name }} (${{ item.price }})</button>
-          <button class="border" @click="previousIngredient" :disabled="step.value === 0">Back</button>
-          <button class="border" @click="clearIngredients">Clear Ingredients</button>
-        <button class="border" @click="nextIngredient"
-          :disabled="step.value === ingredientSteps.length - 1">Next</button>
-        <button class="border" @click="makeBurger">Make Burger</button>
+    <SelectedIngredients :ingredients="selectedIngredients" :removeIngredient="removeIngredient"
+      class="mb-6 w-full max-w-md" />
 
-      </div>
+    <IngredientSelector :currentStep="ingredientSteps[step]" :onSelect="addIngredient" :onNext="nextIngredient"
+      :onPrevious="previousIngredient" :onClear="clearIngredients" :makeBurger="makeBurger"
+      class="mb-6 w-full max-w-md" />
+
+    <div class="flex justify-between items-center w-full max-w-md text-gray-100 mb-6">
+      <p class="text-lg font-medium">Total Price: ${{ calculateTotal().toFixed(2) }}</p>
+      <p class="text-lg font-medium">Wallet: ${{ store.wallet.toFixed(2) }}</p>
     </div>
+
+    <router-link to="/money" class="bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition">
+      Go earn money
+    </router-link>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
-
-function roundToNearestTenth(num) {
-return Math.round(num * 10) / 10;
-}
+import { store } from '@/store.js'
+import IngredientSelector from '@/components/IngredientSelector.vue'
+import SelectedIngredients from '@/components/SelectedIngredients.vue'
 
 const selectedIngredients = reactive({
-  bun: { option: null, price: 0 },
-  patty: { option: null, price: 0 },
-  toppings: [],
-  sauce: { option: null, price: 0 }
+  Bun: { option: null, price: 0 },
+  Patty: { option: null, price: 0 },
+  Toppings: [],
+  Sauce: { option: null, price: 0 }
 })
 
 const ingredientSteps = [
   {
-    key: 'bun',
+    key: 'Bun',
     options: [
       { name: 'Sesame Bun', price: 1.0 },
       { name: 'Whole Wheat Bun', price: 1.2 },
@@ -57,7 +49,7 @@ const ingredientSteps = [
     ]
   },
   {
-    key: 'patty',
+    key: 'Patty',
     options: [
       { name: 'Beef Patty', price: 3.0 },
       { name: 'Chicken Patty', price: 2.5 },
@@ -72,7 +64,7 @@ const ingredientSteps = [
     ]
   },
   {
-    key: 'toppings',
+    key: 'Toppings',
     options: [
       { name: 'Lettuce', price: 0.5 },
       { name: 'Tomato', price: 0.5 },
@@ -92,7 +84,7 @@ const ingredientSteps = [
     ]
   },
   {
-    key: 'sauce',
+    key: 'Sauce',
     options: [
       { name: 'Ketchup', price: 0.3 },
       { name: 'Mustard', price: 0.3 },
@@ -108,29 +100,17 @@ const ingredientSteps = [
   }
 ]
 
-
-
-
-
-function makeBurger() {
-  if (selectedIngredients.bun && selectedIngredients.patty && selectedIngredients.sauce) {
-    alert(`Your burger with ${selectedIngredients.bun}, ${selectedIngredients.patty}, ${selectedIngredients.toppings.join(', ')}, and ${selectedIngredients.sauce} is ready!`)
-  } else {
-    alert('Please select at least a bun, patty, and sauce to make your burger.')
-  }
-}
-
 function addIngredient(item) {
   const currentStep = ingredientSteps[step.value]
-  if (currentStep.key === 'toppings') {
-    if (!selectedIngredients.toppings.includes(item)) {
-      selectedIngredients.toppings.push(item)
-      selectedIngredients.toppings.reduce((acc, t) => Math.floor(acc + t.price), 0)
+  if (currentStep.key === 'Toppings') {
+    if (!selectedIngredients.Toppings.includes(item)) {
+      selectedIngredients.Toppings.push(item)
+      selectedIngredients.Toppings.reduce((acc, t) => acc + t.price, 0)
     }
   } else {
-    selectedIngredients[currentStep.key] = item
     selectedIngredients[currentStep.key].option = item.name
     selectedIngredients[currentStep.key].price = item.price
+
   }
 
 }
@@ -145,10 +125,10 @@ function nextIngredient() {
 }
 
 function clearIngredients() {
-  selectedIngredients.bun[0] = { option: null, price: 0 }
-  selectedIngredients.patty[0] = { option: null, price: 0 }
-  selectedIngredients.toppings = [{ option: null, price: 0 }]
-  selectedIngredients.sauce[0] = { option: null, price: 0 }
+  selectedIngredients.Bun = { option: null, price: 0 }
+  selectedIngredients.Patty = { option: null, price: 0 }
+  selectedIngredients.Toppings = []
+  selectedIngredients.Sauce = { option: null, price: 0 }
 }
 
 function previousIngredient() {
@@ -156,8 +136,31 @@ function previousIngredient() {
     step.value--
   }
 }
+
+function removeIngredient(category, index) {
+  if (category === 'Toppings') {
+    selectedIngredients.Toppings.splice(index, 1)
+  } else {
+    selectedIngredients[category] = { option: null, price: 0 }
+  }
+}
+
+function makeBurger() {
+  if (!selectedIngredients.Bun.option || !selectedIngredients.Patty.option || selectedIngredients.Toppings.length === 0 || !selectedIngredients.Sauce.option) {
+    alert('Please complete your burger by selecting a bun, patty, at least one topping, and a sauce.')
+    return
+  } else {
+    alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' is ready!')
+  }
+}
+
+function calculateTotal() {
+  const bunPrice = selectedIngredients.Bun.price || 0
+  const pattyPrice = selectedIngredients.Patty.price || 0
+  const toppingsPrice = selectedIngredients.Toppings.reduce((acc, t) => acc + t.price, 0)
+  const saucePrice = selectedIngredients.Sauce.price || 0
+  return bunPrice + pattyPrice + toppingsPrice + saucePrice
+}
 </script>
 
-<style scoped>
-@import "tailwindcss";
-</style>
+<style scoped></style>
