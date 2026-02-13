@@ -7,11 +7,11 @@
 </template>
 
 <script setup>
-import { store } from '@/store.js'
 
-function earnMoney() {
-  store.wallet++
-}
+defineProps({
+  wallet: Number,
+  earnMoney: Function,
+})
 </script>
 
 <style scoped></style>

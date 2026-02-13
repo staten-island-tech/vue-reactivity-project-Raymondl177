@@ -5,9 +5,16 @@
     <SelectedIngredients :ingredients="selectedIngredients" :removeIngredient="removeIngredient"
       class="mb-6 w-full max-w-md" />
 
-    <IngredientSelector :currentStep="ingredientSteps[step]" :onSelect="addIngredient" :onNext="nextIngredient"
-      :onPrevious="previousIngredient" :onClear="clearIngredients" :makeBurger="makeBurger"
-      class="mb-6 w-full max-w-md" />
+    <IngredientSelector 
+    :currentStep="ingredientSteps[step]" 
+    :onSelect="addIngredient" 
+    :onNext="nextIngredient"
+    :onPrevious="previousIngredient" 
+    :onClear="clearIngredients" 
+    :makeBurger="makeBurger" 
+    :spendMoney="spendMoney"
+    :calculateTotal="calculateTotal"
+    class="mb-6 w-full max-w-md" />
 
     <div class="flex justify-between items-center w-full max-w-md text-gray-100 mb-6">
       <p class="text-lg font-medium">Total Price: ${{ calculateTotal().toFixed(2) }}</p>
@@ -149,8 +156,9 @@ function makeBurger() {
   if (!selectedIngredients.Bun.option || !selectedIngredients.Patty.option || selectedIngredients.Toppings.length === 0 || !selectedIngredients.Sauce.option) {
     alert('Please complete your burger by selecting a bun, patty, at least one topping, and a sauce.')
     return
-  } else {
-    alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' is ready!')
+  } 
+    else {
+    alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' that costs $' + calculateTotal() + ' is ready!')
   }
 }
 
@@ -161,6 +169,19 @@ function calculateTotal() {
   const saucePrice = selectedIngredients.Sauce.price || 0
   return bunPrice + pattyPrice + toppingsPrice + saucePrice
 }
+
+function spendMoney(amount) {
+  if (store.wallet >= amount && selectedIngredients.Bun.option && selectedIngredients.Patty.option && selectedIngredients.Toppings.length > 0 && selectedIngredients.Sauce.option) {
+    store.wallet -= amount
+  } else if (store.wallet < amount) {
+    alert('You do not have enough money to make this burger. Please go earn more money.')
+    return
+  } else {
+    alert('Please complete your burger by selecting a bun, patty, at least one topping, and a sauce before making it.')
+    return
+  }
+}
+
 </script>
 
 <style scoped></style>
