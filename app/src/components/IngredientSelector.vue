@@ -16,7 +16,7 @@
         class="bg-gray-700 text-gray-100 px-4 py-2 rounded-lg hover:bg-gray-600 transition">Next</button>
       <button @click="onClear"
         class="bg-red-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-red-500 transition">Clear</button>
-      <button @click="makeBurger; spendMoney(calculateTotal())"
+      <button @click="makeBurger"
         class="bg-blue-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-500 transition">Make Burger</button>
     </div>
   </div>
@@ -31,7 +31,6 @@ defineProps({
   onPrevious: Function,
   onClear: Function,
   makeBurger: Function,
-  spendMoney: Function,
   calculateTotal: Function,
 })
 

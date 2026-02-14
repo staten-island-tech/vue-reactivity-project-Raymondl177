@@ -12,7 +12,6 @@
     :onPrevious="previousIngredient" 
     :onClear="clearIngredients" 
     :makeBurger="makeBurger" 
-    :spendMoney="spendMoney"
     :calculateTotal="calculateTotal"
     class="mb-6 w-full max-w-md" />
 
@@ -156,9 +155,12 @@ function makeBurger() {
   if (!selectedIngredients.Bun.option || !selectedIngredients.Patty.option || selectedIngredients.Toppings.length === 0 || !selectedIngredients.Sauce.option) {
     alert('Please complete your burger by selecting a bun, patty, at least one topping, and a sauce.')
     return
-  } 
+  } else if (calculateTotal() > store.wallet) {
+    alert('You do not have enough money to make this burger. Please remove some toppings or go earn more money.')
+  }
     else {
     alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' that costs $' + calculateTotal() + ' is ready!')
+    store.wallet -= calculateTotal()
   }
 }
 
@@ -168,18 +170,6 @@ function calculateTotal() {
   const toppingsPrice = selectedIngredients.Toppings.reduce((acc, t) => acc + t.price, 0)
   const saucePrice = selectedIngredients.Sauce.price || 0
   return bunPrice + pattyPrice + toppingsPrice + saucePrice
-}
-
-function spendMoney(amount) {
-  if (store.wallet >= amount && selectedIngredients.Bun.option && selectedIngredients.Patty.option && selectedIngredients.Toppings.length > 0 && selectedIngredients.Sauce.option) {
-    store.wallet -= amount
-  } else if (store.wallet < amount) {
-    alert('You do not have enough money to make this burger. Please go earn more money.')
-    return
-  } else {
-    alert('Please complete your burger by selecting a bun, patty, at least one topping, and a sauce before making it.')
-    return
-  }
 }
 
 </script>
