@@ -1,4 +1,5 @@
 <template>
+  <div class="min-h-screen bg-gray-900 p-6 flex flex-row items-center justify-center">
   <div class="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
     <h1 class="text-3xl font-bold text-gray-100 mb-6">Burger Maker</h1>
 
@@ -23,6 +24,12 @@
     <router-link to="/money" class="bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition">
       Go earn money
     </router-link>
+  </div>
+
+  <div id="burger-preview" class="min-h-screen bg-gray-900 p-6 flex flex-col items-center hidden justify-center">
+    <h1 class="text-3xl font-bold text-gray-100 mb-6">Your Burger</h1>
+    <img src="/images/Burger.png" alt="Burger">
+  </div>
   </div>
 </template>
 
@@ -112,11 +119,12 @@ function addIngredient(item) {
     if (!selectedIngredients.Toppings.includes(item)) {
       selectedIngredients.Toppings.push(item)
       selectedIngredients.Toppings.reduce((acc, t) => acc + t.price, 0)
+      hideBurger()
     }
   } else {
     selectedIngredients[currentStep.key].option = item.name
     selectedIngredients[currentStep.key].price = item.price
-
+    hideBurger()
   }
 
 }
@@ -135,6 +143,7 @@ function clearIngredients() {
   selectedIngredients.Patty = { option: null, price: 0 }
   selectedIngredients.Toppings = []
   selectedIngredients.Sauce = { option: null, price: 0 }
+  hideBurger()
 }
 
 function previousIngredient() {
@@ -161,7 +170,20 @@ function makeBurger() {
     else {
     alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' that costs $' + calculateTotal() + ' is ready!')
     store.wallet -= calculateTotal()
+    clearIngredients()
+    showBurger()
+    step.value = 0
   }
+}
+
+function showBurger(){
+  const burgerContainer = document.getElementById('burger-preview')
+  burgerContainer.style.display = 'flex'
+}
+
+function hideBurger(){
+  const burgerContainer = document.getElementById('burger-preview')
+  burgerContainer.style.display = 'none'
 }
 
 function calculateTotal() {
