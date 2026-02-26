@@ -15,9 +15,6 @@
     :calculateTotal="calculateTotal"
     class="mb-6 w-full max-w-md" />
 
-    <BurgerImage 
-    :showBurger="showBurger()" class="mb-6 w-full max-w-md" />
-
     <div class="flex justify-between items-center w-full max-w-md text-gray-100 mb-6">
       <p class="text-lg font-medium">Total Price: ${{ calculateTotal().toFixed(2) }}</p>
       <p class="text-lg font-medium">Wallet: ${{ store.wallet.toFixed(2) }}</p>
@@ -34,7 +31,6 @@ import { ref, reactive } from 'vue'
 import { store } from '@/store.js'
 import IngredientSelector from '@/components/IngredientSelector.vue'
 import SelectedIngredients from '@/components/SelectedIngredients.vue'
-import BurgerImage from '@/components/BurgerImage.vue'
 
 const selectedIngredients = reactive({
   Bun: { option: null, price: 0 },
@@ -165,13 +161,7 @@ function makeBurger() {
     else {
     alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' that costs $' + calculateTotal() + ' is ready!')
     store.wallet -= calculateTotal()
-    clearIngredients()
-    showBurger()
   }
-}
-
-function showBurger() {
-
 }
 
 function calculateTotal() {
