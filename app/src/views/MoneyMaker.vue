@@ -8,6 +8,7 @@
       <GetMoney class="mb-6" 
       :wallet="store.wallet" 
       :earnMoney="earnMoney" 
+      :gambleMoney="gambleMoney"
       />
       <router-link to="/"
         class="inline-block bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition">
@@ -25,6 +26,14 @@ function earnMoney() {
   store.wallet++
 }
 
+function gambleMoney() {
+  const randomNumber = Math.random()
+  if (randomNumber < 0.5) {
+    store.wallet -= 2
+  } else {
+    store.wallet += 2
+  }
+}
 </script>
 
 <style scoped></style>
