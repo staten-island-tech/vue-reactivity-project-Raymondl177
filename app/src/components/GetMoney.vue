@@ -6,6 +6,9 @@
     <button @click="gambleMoney" class="bg-red-600 px-6 py-2 rounded-lg hover:bg-red-500 transition">
       Gamble Money
     </button>
+    <button @click="doubleOrNothing" class="bg-yellow-600 px-6 py-2 rounded-lg hover:bg-yellow-500 transition">
+      Double or Nothing
+    </button>
   </div>
 </template>
 
@@ -14,7 +17,9 @@
 defineProps({
   wallet: Number,
   earnMoney: Function,
-  gambleMoney: Function
+  gambleMoney: Function,
+  doubleOrNothing: Function,
+  amount: Number
 })
 </script>
 

@@ -9,7 +9,12 @@
       :wallet="store.wallet" 
       :earnMoney="earnMoney" 
       :gambleMoney="gambleMoney"
+      :doubleOrNothing="doubleOrNothing"
+      :amount="amount"
       />
+      <h1 class="text-2xl font-semibold text-gray-100 mb-4">{{ amount }}</h1>
+      <button class="bg-green-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-green-500 transition" @click="amount++">+1</button>
+      <button class="bg-red-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-red-500 transition" @click="amount--">-1</button>
       <router-link to="/"
         class="inline-block bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition">
         Back to Burger Maker
@@ -21,17 +26,27 @@
 <script setup>
 import GetMoney from '@/components/GetMoney.vue'
 import { store } from '@/store.js'
+import { ref } from 'vue'
 
 function earnMoney() {
   store.wallet++
 }
+const amount = ref(1)
 
 function gambleMoney() {
   const randomNumber = Math.random()
   if (randomNumber < 0.5) {
-    store.wallet -= 2
+    store.wallet -= amount.value
   } else {
-    store.wallet += 2
+    store.wallet += amount.value
+  }
+}
+function doubleOrNothing() {
+  const randomNumber = Math.random()
+  if (randomNumber < 0.5) {
+    store.wallet = 0
+  } else {
+    store.wallet *= 2
   }
 }
 </script>
