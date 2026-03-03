@@ -177,13 +177,11 @@ function makeBurger() {
 }
 
 function showBurger(){
-  const burgerContainer = document.getElementById('burger-preview')
-  burgerContainer.style.display = 'flex'
+  document.getElementById('burger-preview').style.display = 'flex';
 }
 
 function hideBurger(){
-  const burgerContainer = document.getElementById('burger-preview')
-  burgerContainer.style.display = 'none'
+  document.getElementById('burger-preview').style.display = 'none';
 }
 
 function calculateTotal() {

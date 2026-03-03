@@ -11,10 +11,12 @@
       :gambleMoney="gambleMoney"
       :doubleOrNothing="doubleOrNothing"
       :amount="amount"
+      :earnDouble="earnDouble"
+      :earnFive="earnFive"
       />
-      <h1 class="text-2xl font-semibold text-gray-100 mb-4">{{ amount }}</h1>
+      <h1 class="text-2xl font-semibold text-gray-100 mb-4">Gamble Amount: {{ amount }}</h1>
       <button class="bg-green-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-green-500 transition" @click="amount++">+1</button>
-      <button class="bg-red-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-red-500 transition" @click="amount--">-1</button>
+      <button class="bg-red-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-red-500 transition" v-if="amount > 1" @click="amount--">-1</button>
       <router-link to="/"
         class="inline-block bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition">
         Back to Burger Maker
@@ -34,6 +36,10 @@ function earnMoney() {
 const amount = ref(1)
 
 function gambleMoney() {
+  if (amount.value > store.wallet) {
+    alert("ur broke");
+    return;
+  }
   const randomNumber = Math.random()
   if (randomNumber < 0.5) {
     store.wallet -= amount.value
@@ -48,6 +54,14 @@ function doubleOrNothing() {
   } else {
     store.wallet *= 2
   }
+}
+
+function earnDouble() {
+  store.wallet += 2
+}
+
+function earnFive() {
+  store.wallet += 5
 }
 </script>
 
