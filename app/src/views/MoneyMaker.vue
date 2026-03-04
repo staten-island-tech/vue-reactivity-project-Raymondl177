@@ -11,8 +11,10 @@
       :gambleMoney="gambleMoney"
       :doubleOrNothing="doubleOrNothing"
       :amount="amount"
-      :earnDouble="earnDouble"
+      :earnTwo="earnTwo"
+      :earnTen="earnTen"
       :earnFive="earnFive"
+      :doubleMoney="doubleMoney"
       />
       <h1 class="text-2xl font-semibold text-gray-100 mb-4">Gamble Amount: {{ amount }}</h1>
       <button class="bg-green-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-green-500 transition" @click="amount++">+1</button>
@@ -56,13 +58,22 @@ function doubleOrNothing() {
   }
 }
 
-function earnDouble() {
+function earnTwo() {
   store.wallet += 2
+}
+
+function earnTen() {
+  store.wallet += 10
 }
 
 function earnFive() {
   store.wallet += 5
 }
+
+function doubleMoney() {
+  store.wallet = store.wallet * 2
+}
+
 </script>
 
 <style scoped></style>
