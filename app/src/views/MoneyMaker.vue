@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-6">
     <div class="bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-sm text-center">
-      <h1 class="text-3xl font-semibold text-gray-100 mb-4">Money Maker</h1>
+      <h1 class="text-4xl font-bold text-gray-100 mb-4">Money Maker</h1>
       <h2 class="text-xl font-medium text-gray-300 mb-6">
         Wallet: ${{ store.wallet.toFixed(2) }}
       </h2>
@@ -17,10 +17,11 @@
       :doubleMoney="doubleMoney"
       />
       <h1 class="text-2xl font-semibold text-gray-100 mb-4">Gamble Amount: {{ amount }}</h1>
-      <button class="bg-green-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-green-500 transition" @click="amount++">+1</button>
-      <button class="bg-red-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-red-500 transition" v-if="amount > 1" @click="amount--">-1</button>
+      <input class="bg-gray-700 text-gray-100 px-4 py-2 mr-2 rounded-lg " type="text" name="amount" id="amount" placeholder="Enter amount" v-model="amount">
+      <button class="bg-green-600 text-gray-100 px-4 py-2 mr-2 rounded-lg hover:bg-green-500 transition cursor-pointer font-medium" @click="amount++">+1</button>
+      <button class="bg-red-600 text-gray-100 px-4 py-2 mr-2 rounded-lg hover:bg-red-500 transition cursor-pointer font-medium" v-if="amount > 1" @click="amount--">-1</button>
       <router-link to="/"
-        class="inline-block bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition">
+        class="inline-block bg-blue-600 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-500 transition font-medium">
         Back to Burger Maker
       </router-link>
     </div>
@@ -35,7 +36,7 @@ import { ref } from 'vue'
 function earnMoney() {
   store.wallet++
 }
-const amount = ref(1)
+const amount = ref(0)
 
 function gambleMoney() {
   if (amount.value > store.wallet) {

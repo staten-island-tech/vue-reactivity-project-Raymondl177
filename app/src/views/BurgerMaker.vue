@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-900 p-6 flex flex-row items-center justify-center">
   <div class="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
-    <h1 class="text-3xl font-bold text-gray-100 mb-6">Burger Maker</h1>
+    <h1 class="text-5xl font-bold text-gray-100 mb-6">Burger Maker</h1>
 
     <SelectedIngredients :ingredients="selectedIngredients" :removeIngredient="removeIngredient"
       class="mb-6 w-full max-w-md" />
@@ -29,6 +29,7 @@
   <div id="burger-preview" class="min-h-screen bg-gray-900 p-6 flex flex-col items-center hidden justify-center">
     <h1 class="text-3xl font-bold text-gray-100 mb-6">Your Burger</h1>
     <img src="/images/Burger.png" alt="Burger">
+    <button @click="eatBurger" class="bg-green-600 text-gray-100 px-7 py-3 rounded-lg hover:bg-green-500 transition cursor-pointer text-2xl font-bold">Eat</button>
   </div>
   </div>
 </template>
@@ -168,7 +169,7 @@ function makeBurger() {
     alert('You do not have enough money to make this burger. Please remove some toppings or go earn more money.')
   }
     else {
-    alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' that costs $' + calculateTotal() + ' is ready!')
+    alert('Your burger with ' + selectedIngredients.Bun.option + ', ' + selectedIngredients.Patty.option + ', ' + selectedIngredients.Toppings.map(t => t.name).join(', ') + ', and ' + selectedIngredients.Sauce.option + ' that costs $' + calculateTotal().toFixed(2) + ' is ready!')
     store.wallet -= calculateTotal()
     clearIngredients()
     showBurger()
@@ -192,6 +193,10 @@ function calculateTotal() {
   return bunPrice + pattyPrice + toppingsPrice + saucePrice
 }
 
+function eatBurger() {
+  alert('You ate the burger!');
+  hideBurger();
+}
 </script>
 
 <style scoped></style>
