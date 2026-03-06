@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-800 flex justify-center flex-col p-6 rounded-xl w-full max-w-sm text-center text-gray-100">
+  <div class="bg-gray-800 flex justify-center flex-col p-6 rounded-xl w-full text-center text-gray-100">
     <button @click="earnMoney" class="bg-green-600 px-6 py-2 mb-2 rounded-lg hover:bg-green-500 transition cursor-pointer font-medium">
       Earn +1
     </button>
